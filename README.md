@@ -2,7 +2,7 @@
 
 > 打完麻将时，在网页中输入每人的**终局分、台费垫付**，就能一键算清**每人应收/应付多少**，并给出一组简洁的转账方案，用户照着结果转账即可。
 >
-> 🔗 在线使用：<https://mahjong-tally-helper.app.workbuddy.host/>  
+> 🔗 在线使用：<https://mahjong-tally-helper.app.workbuddy.host/>  (已失效，等待重新上线)
 > 📦 形态：纯静态单文件网页，手机浏览器直接打开，无需下载、无需注册。
 
 ---
