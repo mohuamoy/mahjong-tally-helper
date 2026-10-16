@@ -1,4 +1,4 @@
-# 🀄 麻将算账助手 · Mahjong Tally Helper
+># 🀄 麻将算账助手 · Mahjong Tally Helper
 
 > 打完麻将，输入每人终局分和台费垫付，一键算清谁该给谁转多少钱，给出一组最少笔数的转账方案。
 >
@@ -20,10 +20,10 @@
 2. **对局表现**：2-6 名牌手的姓名、终局分、台费垫付/免除。
 3. **终局结果**：战绩榜单（红输绿赢） + 转账方案（谁→谁 多少钱） + 导出战报。
 
-<div align="center">
-  <img src="https://github.com/user-attachments/assets/aa73238d-76ed-4e2e-8167-b2b307a8e78c" width="50%" height="50%"alt="结算页截图">
-  <p><em>点击「生成结果」后的结算页效果</em></p>
-</div>
+<div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+  <img src="https://github.com/user-attachments/assets/9cdb97fd-a685-46fb-be12-90a47b321a82" width="30%" height="30%" alt="输入界面截图">
+  <img src="https://github.com/user-attachments/assets/a3cf5238-8f29-4bf5-bc5b-6d8ded41cc08" width="30%" height="30%" alt="结算界面截图">
+</div>  
 
 ## 🛠️ 技术方案
 
