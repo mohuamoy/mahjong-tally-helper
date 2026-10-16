@@ -20,8 +20,15 @@
 2. **对局表现**：2-6 名牌手的姓名、终局分、台费垫付/免除。
 3. **终局结果**：战绩榜单（红输绿赢） + 转账方案（谁→谁 多少钱） + 导出战报。
 
-> 📸 *[建议在这里放一张结算页的手机截图，文件名 `docs/screenshot-settlement.png`]*
-> `![](docs/screenshot-settlement.png)`
+<div align="center">
+  <img src="[图片链接](https://github.com/user-attachments/assets/2310e486-307d-4ddc-9620-540e713a5083)" width="60%" alt="结算页截图">
+  <p><em>输入台费垫付及每人终局分的页面</em></p>
+</div>
+> `![](docs/screenshot-settlement.png)`<img width="1199" height="2590" alt="image" src="https://github.com/user-attachments/assets/6499f293-3f28-43d7-a480-5d08db651031" />
+<div align="center">
+  <img src="[图片链接](https://github.com/user-attachments/assets/6499f293-3f28-43d7-a480-5d08db651031)" width="60%" alt="结算页截图">
+  <p><em>结算页面</em></p>
+</div>
 
 ## 🛠️ 技术方案
 
