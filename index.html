@@ -2,7 +2,7 @@
 <html lang="zh-CN" data-page-node-id="ofh4jxp45euSfO7kbQIHky"><head data-page-node-id="aDbnor7ufYmCkiDbOwtpa2">
   <meta charset="UTF-8" data-page-node-id="JN2s6fGRKrcbGWgeL8YLrb">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" data-page-node-id="DwG2weJcN8UFdlvClhiE4A">
-  <title data-page-node-id="1EeI0UvpMAvTwNseUFxC4k">麻将算账助手v1.0</title>
+  <title data-page-node-id="1EeI0UvpMAvTwNseUFxC4k">麻将算账助手 v1.1</title>
   <style data-page-node-id="10FlhGE94Iux5KpHBD7Q9J">
     :root {
       --bg: #f5f7fa;
@@ -18,75 +18,81 @@
       --sec-soft: #eaf1ff;
       --warn: #d97706;
       --warn-soft: #fef3e2;
-      /* 结算页备用缩放变量（当前未启用：区块三已回退到上线版 em/vw，随页面自然滚动，全部内容必然可见；如需重做一屏再调这里） */
-      --page-pad: 1.5dvh;
-      --gap: 1dvh;
-      --fs-title: clamp(15px, 3dvh, 20px);
-      --fs-body: clamp(12px, 2.4dvh, 18px);
-      --fs-btn: clamp(14px, 2.6dvh, 18px);
-      --line-height: 1.32;
+      /* ===== 一屏看全调试变量（已启用）：在浏览器 DevTools 实时调下面这些 dvh 值，观察结算页能否一屏看全（区块三内部滚动已移除，内容超出则随页面自然滚动） ===== */
+      --page-pad: 1.2dvh;                                  /* 结算卡片内边距，越小越省竖向空间 */
+      --gap: 0.8dvh;                                       /* 结算卡片内各组/行间距 */
+      --fs-title: clamp(13px, 2.3dvh, 17px);               /* 区块/小标题字号，随屏高缩放（已下调） */
+      --fs-body: clamp(10px, 1.9dvh, 15px);                /* 结算正文（战绩/转账）主字号，核心调节项（已下调） */
+      --fs-btn: clamp(12px, 2.1dvh, 15px);                 /* 导出战报按钮字号（已下调） */
+      --line-height: 1.28;                                 /* 行高，保持不变 */
     }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body { margin: 0; padding: 0; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
       background: var(--bg); color: var(--ink);
-      line-height: 1.5; padding: 16px; max-width: 480px; margin: 0 auto;
+      line-height: 1.5; padding: 16px 24px; max-width: 480px; margin: 0 auto;
     }
     .top { display: flex; flex-direction: column; align-items: center; gap: 6px; margin-bottom: 16px; }
-    .top h1 { font-size: 20px; margin: 0; font-weight: 700; }
+    .top h1 { font-size: clamp(19px, 5.4vw, 23px); margin: 0; font-weight: 800; letter-spacing: .3px; display: inline-flex; align-items: center; gap: .4em; }
+    .top h1 .tile { display: inline-grid; place-items: center; width: 1.5em; height: 1.5em; border-radius: .36em; background: linear-gradient(160deg, #fff, #eef1f5); border: 1px solid var(--line); color: var(--brand); font-size: .82em; font-weight: 800; box-shadow: 0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06); }
+    .top .sub { font-size: 12.5px; color: var(--muted); margin-top: 0; }
     .badge { font-size: 12px; color: var(--brand); background: var(--brand-soft); padding: 3px 9px; border-radius: 999px; font-weight: 600; }
-    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+    .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 16px; margin-bottom: 12px; box-shadow: 0 1px 2px rgba(16,24,40,.04), 0 1px 3px rgba(16,24,40,.06); }
     .sec-head { display: flex; align-items: center; gap: 8px; margin: 0 0 10px; }
     .sec-tag { font-size: 12px; font-weight: 700; color: var(--sec); background: var(--sec-soft); padding: 2px 8px; border-radius: 6px; }
-    .sec-title { font-size: 17px; font-weight: 700; margin: 0; }
-    .lead { font-size: 14px; color: var(--muted); margin: 0 0 12px; }
+    .sec-title { font-size: 16px; font-weight: 700; margin: 0; }
+    .lead { font-size: 13px; color: var(--muted); margin: 0 0 12px; }
     .field { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 7px 0; border-bottom: 1px solid var(--line); }
     .field:last-child { border-bottom: none; }
-    .field label { font-size: 15px; color: var(--ink); flex: 0 0 auto; }
-    .field .hint { font-size: 13px; color: var(--muted); margin-left: 6px; }
-    .field input { flex: 1 1 auto; text-align: right; font-size: 16px; border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; min-width: 0; }
+    .field label { font-size: 13.5px; color: var(--ink); flex: 0 0 auto; }
+    .field .hint { font-size: 12px; color: var(--muted); margin-left: 6px; }
+    .field input { flex: 1 1 auto; text-align: right; font-size: 14.5px; border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; min-width: 0; }
     .field input.invalid { border-color: var(--brand); background: var(--brand-soft); }
     .ratio-block { padding: 4px 0 2px; }
     .ratio-chips { display: flex; gap: 8px; }
-    .chip { position: relative; flex: 1 1 0; min-width: 0; text-align: center; font-size: 15px; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 9px 4px; cursor: pointer; user-select: none; }
+    .chip { position: relative; flex: 1 1 0; min-width: 0; text-align: center; font-size: 13.5px; color: var(--ink); border: 1px solid var(--line); border-radius: 8px; padding: 9px 4px; cursor: pointer; user-select: none; }
     .chip input { position: absolute; opacity: 0; width: 0; height: 0; }
     .chip.on { border-color: var(--brand); background: var(--brand-soft); color: var(--brand); font-weight: 700; }
-    .ratio-custom { width: 100%; margin-top: 8px; font-size: 15px; border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; box-sizing: border-box; }
+    .ratio-custom { width: 100%; margin-top: 8px; font-size: 13.5px; border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; box-sizing: border-box; }
     .toolbar { display: flex; gap: 8px; align-items: center; }
-    .toolbar button { font-size: 15px; color: var(--sec); background: var(--sec-soft); border: 1px solid var(--sec); border-radius: 8px; padding: 7px 12px; cursor: pointer; }
+    .toolbar button { font-size: 13.5px; color: var(--sec); background: var(--sec-soft); border: 1px solid var(--sec); border-radius: 8px; padding: 7px 12px; cursor: pointer; }
     .toolbar button:disabled { color: var(--muted); background: #f3f4f6; border-color: var(--line); cursor: not-allowed; }
-    .status { font-size: 14px; padding: 7px 9px; border-radius: 8px; margin-bottom: 10px; }
+    .status { font-size: 13px; padding: 7px 9px; border-radius: 8px; margin-bottom: 10px; }
     .status.ok { color: var(--ok); background: var(--ok-soft); }
     .status.bad { color: var(--brand); background: var(--brand-soft); }
     .status.warn { color: var(--warn); background: var(--warn-soft); }
     .status.idle { color: var(--muted); background: #f3f4f6; }
-    .player { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; transition: opacity .3s ease, transform .3s ease; }
+    .player { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; transition: opacity .3s ease, transform .3s ease, border-color .15s, background .15s; }
+    .player:focus-within { border-color: var(--sec); background: var(--card); }
+    .player .name:focus, .player .score:focus { outline: none; border-color: var(--sec); box-shadow: 0 0 0 3px color-mix(in srgb, var(--sec) 16%, transparent); }
     .player.invalid { border-color: var(--brand); background: var(--brand-soft); }
     /* 牌手卡片顶部行：左侧标号 + 右侧删除按钮，与下方输入框彻底分离，避免误触 */
     .player .p-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
-    .player .p-label { font-size: 13px; font-weight: 600; color: var(--muted); }
+    .player .p-label { font-size: 12px; font-weight: 600; color: var(--muted); }
     /* 删除按钮：仅保留小 ×（移除文字，降低误触） */
-    .player .del { font-size: 16px; line-height: 1; color: var(--muted); background: none; border: none; cursor: pointer; padding: 3px 6px; min-width: 22px; text-align: center; border-radius: 6px; }
+    .player .del { font-size: 15px; line-height: 1; color: var(--muted); background: none; border: none; cursor: pointer; padding: 3px 6px; min-width: 22px; text-align: center; border-radius: 6px; }
     .player .del:hover { color: var(--brand); background: var(--brand-soft); }
     /* 删除牌手：向下淡出动画（0.3s）；transition 定义在 .player 基样式上，确保平滑过渡 */
     .player.removing { opacity: 0; transform: translateY(10px); }
     /* 起始分模式选择：视觉弱化处理，仅兜底少数情况 */
     .init-mode { display: inline-flex; flex: 0 0 auto; }
-    .init-mode select { font-size: 13px; color: var(--muted); background: #f3f4f6; border: 1px solid var(--line); border-radius: 6px; padding: 2px 4px; cursor: pointer; }
+    .init-mode select { font-size: 12px; color: var(--muted); background: #f3f4f6; border: 1px solid var(--line); border-radius: 6px; padding: 2px 4px; cursor: pointer; }
     .init-mode select:focus { outline: none; border-color: var(--brand); }
     .field input:disabled { background: #f3f4f6; color: var(--muted); }
     .player .row1 { display: flex; gap: 8px; align-items: center; }
-    .player .name { flex: 1 1 auto; font-size: 16px; border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; min-width: 0; }
-    .player .score { flex: 0 0 88px; font-size: 16px; border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; text-align: right; }
-    .player .row2 { display: flex; gap: 14px; align-items: center; margin-top: 6px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
+    .player .name { flex: 1 1 auto; font-size: 14.5px; border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; min-width: 0; }
+    .player .score { flex: 0 0 88px; font-size: 14.5px; border: 1px solid var(--line); border-radius: 8px; padding: 9px 11px; text-align: right; }
+    .player .row2 { display: flex; gap: 14px; align-items: center; margin-top: 6px; font-size: 12px; color: var(--muted); flex-wrap: wrap; }
     .player .row2 label { display: flex; align-items: center; gap: 5px; }
     /* 逐人初始分框：仅「自定义」模式显示（统一模式隐藏） */
     .player .init-field { display: flex; align-items: center; gap: 4px; }
     .player .pinit { width: 62px; font-size: 15px; border: 1px solid var(--line); border-radius: 6px; padding: 8px 6px; text-align: right; }
     .add { display: block; width: 100%; text-align: center; font-size: 15px; color: var(--sec); background: var(--sec-soft); border: 1px dashed var(--sec); border-radius: 10px; padding: 8px; cursor: pointer; margin-bottom: 10px; }
     .add:disabled { color: var(--muted); background: #f3f4f6; border-color: var(--line); cursor: not-allowed; }
-    .btn-primary { display: block; width: 100%; text-align: center; font-size: 17px; font-weight: 700; color: #fff; background: var(--brand); border: none; border-radius: 12px; padding: 13px; cursor: pointer; margin-top: 4px; }
+    .btn-primary { display: block; width: 100%; text-align: center; font-size: 15px; font-weight: 700; color: #fff; background: var(--brand); border: none; border-radius: 12px; padding: 13px; cursor: pointer; margin-top: 4px; transition: transform .1s, opacity .15s, box-shadow .15s; }
+    .btn-primary:active:not(:disabled) { transform: translateY(1px); box-shadow: 0 1px 4px rgba(232,68,46,.2); }
+    .btn-primary.pressing { transform: translateY(1px); box-shadow: 0 1px 4px rgba(232,68,46,.2); }
     .btn-primary:disabled { background: #c9ccd1; }
     .result-block { display: none; }
     .result-block.show { display: block; }
@@ -112,6 +118,7 @@
     .x-line { display: flex; align-items: center; gap: 0.5em; font-size: 1.0625em; color: var(--ink); padding: 0.25em 0; border-bottom: 1px dashed var(--line); }
     .x-line:last-child { border-bottom: none; }
     .x-line .x-amt { margin-left: auto; font-weight: 700; color: var(--ink); }
+    .x-arrow { flex: 0 0 auto; }
     .plan-meta { font-size: 0.875em; color: var(--muted); margin: 0.5em 0 0; }
     .check { font-size: 0.875em; color: var(--ok); background: var(--ok-soft); border-radius: 8px; padding: 0.5em 0.625em; margin-bottom: 0.875em; }
     .check.bad { color: var(--brand); background: var(--brand-soft); }
@@ -125,13 +132,19 @@
     /* ===== M4 视觉打磨：信息层级 + 响应式（仅 CSS，不动算法/结构） ===== */
     /* 结果区视觉抬升：与输入卡片拉开主次，散场后一眼看到结算 */
     /* 结算页沿用上线版本：普通 block 流式卡片，随页面自然滚动，全部内容（含战绩榜单）必然完整可见；字号/间距/padding 用 em 相对倍率 */
-    .result-block.show { border-top: 3px solid var(--brand); box-shadow: 0 4px 14px rgba(232,68,46,0.08); padding: 1em; font-size: clamp(11.5px, 3.8vw, 15.5px); line-height: 1.32; }
+    .result-block.show {
+      border-top: 3px solid var(--brand);
+      box-shadow: 0 6px 20px rgba(43,108,255,.10), 0 2px 6px rgba(16,24,40,.06);
+      padding: var(--page-pad);
+      font-size: var(--fs-body);
+      line-height: var(--line-height);
+    }
     .result-block .sec-head { margin-bottom: 0.625em; }
-    .result-block .sec-title { font-size: 1.125em; }
+    .result-block .sec-title { font-size: var(--fs-title); }
     .result-block .lead { font-size: 0.875em; margin-bottom: 0.5em; }
-    .result-block .btn-primary { padding: 0.8125em; font-size: 1.0625em; }
+    .result-block .btn-primary { padding: 0.7em; font-size: var(--fs-btn); }
     /* 区块标题略微强化，分组更清晰 */
-    .sec-title { font-size: 18px; }
+    .sec-title { font-size: 16px; }
     .sec-tag { letter-spacing: .5px; }
     /* 结果区两组子标题（战绩榜单 / 转账方案）上方留白分隔，层级更分明（分割线已移除：子卡 .net-list/.plan-card 边框已足够） */
     .result-block .lead[style*="font-weight:600"] { margin-top: 0.5em; padding-top: 0.5em; font-size: 1.0625em; }
@@ -142,16 +155,16 @@
 
     /* 小屏（≤400px）：收紧外边距与卡片内边距，释放横向空间（结算页字号/间距已改 em + 流式根字号，不再在此固定覆盖） */
     @media (max-width: 400px) {
-      body { padding: 12px; }
+      body { padding: 14px 20px; }
       .card { padding: 14px; border-radius: 12px; }
-      .top h1 { font-size: 19px; }
+      .top h1 { font-size: 17px; }
       .player { padding: 10px 12px; }
       .player .row1 { gap: 8px; }
       .player .score { flex-basis: 76px; }
     }
     /* 极窄屏（≤340px）：仅做最小压缩，保持卡片内留白舒适，避免文字贴边 */
     @media (max-width: 340px) {
-      body { padding: 12px; }
+      body { padding: 14px 18px; }
       .card { padding: 12px; }
       .field { gap: 8px; }
       .player .score { flex-basis: 68px; }
@@ -161,30 +174,31 @@
     @media (max-width: 480px) {
       #inputArea .card { padding: 14px; line-height: 1.32; }
       #inputArea .sec-head { margin-bottom: 8px; }
-      #inputArea .sec-title { font-size: 16px; }
+      #inputArea .sec-title { font-size: 15px; }
       #inputArea .field { padding: 6px 0; }
-      #inputArea .field label { font-size: 14px; }
-      #inputArea .field .hint { font-size: 12px; }
-      #inputArea .field input { font-size: 15px; padding: 8px 10px; }
-      #inputArea .ratio-chips .chip { font-size: 14px; padding: 8px 3px; }
-      #inputArea .ratio-custom { font-size: 14px; }
-      #inputArea .init-mode select { font-size: 12px; }
+      #inputArea .field label { font-size: 13px; }
+      #inputArea .field .hint { font-size: 11.5px; }
+      #inputArea .field input { font-size: 14px; padding: 8px 10px; }
+      #inputArea .ratio-chips .chip { font-size: 13px; padding: 8px 3px; }
+      #inputArea .ratio-custom { font-size: 13px; }
+      #inputArea .init-mode select { font-size: 11.5px; }
       #inputArea .player { padding: 9px 10px; }
-      #inputArea .player .p-label { font-size: 12px; }
-      #inputArea .player .name, #inputArea .player .score { font-size: 15px; padding: 8px 10px; }
-      #inputArea .player .row2 { font-size: 12px; gap: 12px; }
-      #inputArea .player .pinit { font-size: 14px; }
-      #inputArea .add { font-size: 14px; padding: 7px; }
-      #inputArea .btn-primary { font-size: 16px; padding: 11px; }
-      #inputArea .toolbar button { font-size: 14px; padding: 6px 11px; }
-      #inputArea .status { font-size: 13px; padding: 6px 8px; }
+      #inputArea .player .p-label { font-size: 11.5px; }
+      #inputArea .player .name, #inputArea .player .score { font-size: 14px; padding: 8px 10px; }
+      #inputArea .player .row2 { font-size: 11.5px; gap: 12px; }
+      #inputArea .player .pinit { font-size: 13px; }
+      #inputArea .add { font-size: 13px; padding: 7px; }
+      #inputArea .btn-primary { font-size: 14px; padding: 11px; }
+      #inputArea .toolbar button { font-size: 13px; padding: 6px 11px; }
+      #inputArea .status { font-size: 12.5px; padding: 6px 8px; }
       #inputArea .mini { font-size: 12px; }
     }
   </style>
 <style id="__dm_no_drag_style__" data-page-node-id="idEWnDBLWyVA9GNzBgWFjE">* { -webkit-user-drag: none !important; }</style><style id="__dm_bindable_badge_style__" data-page-node-id="THiEdlUBh965UXFBzRlVu2">[data-sp-bindable="database"]{outline:1px dashed #0088ff;outline-offset:2px;border-radius:4px;}[data-sp-bindable="database"] *{pointer-events:none !important;transition:none !important;animation:none !important;}[data-sp-bindable="database"]{transition:none !important;animation:none !important;}</style></head>
 <body data-page-node-id="CTrMtOEkV8BwIGHPT2JzmQ" style="">
   <div class="top" data-page-node-id="wiFQAiTvzctvZpycnfZXFu">
-    <h1 data-page-node-id="g0GqwL6lJcFNgWkU3ix9oc" style="white-space: pre-wrap;">麻将算账助手​</h1>
+    <h1 data-page-node-id="g0GqwL6lJcFNgWkU3ix9oc"><span class="tile">🀄</span>麻将算账助手</h1>
+    <div class="sub">填台费和分数，一键算出谁转谁多少</div>
   </div>
 
   <!-- ① 牌局设置 -->
@@ -200,7 +214,7 @@
         <label class="chip" data-page-node-id="2yEPsq01qaiTJel2uajDpr"><input type="radio" name="ratio" value="1" data-page-node-id="qLM6ZhkmwfoOE3Dla5czHA"><span data-page-node-id="nZA3jy1Qj0jKdAbaesnIRx">一块底</span></label>
         <label class="chip" data-page-node-id="SkR728RdAMnIakTtz3jELo"><input type="radio" name="ratio" value="__other__" data-page-node-id="qwfq9sYSbKS7THmlec5m6k"><span data-page-node-id="yGutKhtzck7xNHhtxXEBJx">自定义</span></label>
       </div>
-      <input type="number" step="0.01" id="ratioInput" class="ratio-custom" placeholder="1 底分 = ？元" style="display:none;" data-page-node-id="nZ2KmIxbTAC54bQJh71llV">
+      <input type="number" step="0.01" id="ratioInput" class="ratio-custom" placeholder="1 底分 = ？元（如 0.2 ）" style="display:none;" data-page-node-id="nZ2KmIxbTAC54bQJh71llV">
     </div>
     <div class="field" data-page-node-id="fpLkQgxqaWKszHxCj1VONx">
       <label data-page-node-id="HmHHxXMEhyum1JO6m1sjcz">起始分</label>
@@ -732,12 +746,11 @@
       const timeStr = g.time || "（未填时间）";
       // 区块三小字第二行：起始分数值读取起始分输入框锁定的数值；自定义模式追加「或 自定义」
       const initVal = isNaN(g.initScore) ? "?" : g.initScore;
-      const initLabel = initMode === "custom" ? `每人起始分 ${initVal}或自定义` : `起始分 ${initVal}`;
+      const initLabel = initMode === "custom" ? `每人起始分${initVal}或自定义` : `起始分${initVal}`;
       const prepaidPlayer = players.find((p) => p.prepaid);
-      const line1 = `${dateStr}&nbsp;&nbsp;${timeStr}`;
-      const line2 = `${baseName(ratioNum)}&nbsp;&nbsp;${initLabel}`;
-      const line3 = prepaidPlayer ? `${displayName(prepaidPlayer.name)}&nbsp;&nbsp;垫付台费 ${yuan(g.feeCents)} 元` : "";
-      const metaLine = `${line1}<br>${line2}` + (line3 ? `<br>${line3}` : "");
+      const line1 = `${dateStr}&nbsp;&nbsp;${timeStr}&nbsp;&nbsp;${baseName(ratioNum)}&nbsp;&nbsp;${initLabel}`;
+      const line2 = prepaidPlayer ? `${displayName(prepaidPlayer.name)}&nbsp;&nbsp;垫付台费 ${yuan(g.feeCents)} 元` : "";
+      const metaLine = line1 + (line2 ? `<br>${line2}` : "");
 
       // 第一组：战绩榜单（姓名 → 净得分大字(贴右) → 应收应付 → 战绩明细；颜色：赢/收入绿、输/支出红）
       let netRows = "";
@@ -774,12 +787,13 @@
 
       // 第二组：转账方案（单卡片，全黑文字，名字不加红绿；共 N 笔与明细同卡；微信转账双箭头图标）
       const transferIcon = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#07C160" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 7H20"/><path d="M16 3l4 4-4 4"/><path d="M16 17H4"/><path d="M8 13l-4 4 4 4"/></svg>`;
+      const transferArrow = `<svg class="x-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#444" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12h14"/><path d="M13 6l6 6-6 6"/></svg>`;
       let planRows = "";
       if (result.transfers.length === 0) {
         planRows = `<div class="ph">本局无输赢，无需转账 ✓</div>`;
       } else {
         for (const t of result.transfers) {
-          planRows += `<div class="x-line">${escapeHtml(displayName(t.from))} → ${escapeHtml(displayName(t.to))} <span class="x-amt">${yuan(t.amountCents)} 元</span></div>`;
+          planRows += `<div class="x-line">${escapeHtml(displayName(t.from))}${transferArrow}${escapeHtml(displayName(t.to))}<span class="x-amt">${yuan(t.amountCents)} 元</span></div>`;
         }
       }
 
@@ -787,7 +801,7 @@
       block.className = "card result-block show";
       block.innerHTML = `
         <div class="sec-head"><span class="sec-tag">区块三</span><h2 class="sec-title">终局计分</h2></div>
-        <p class="mini meta-info" style="margin:0.125em 0 0.625em;">${metaLine}</p>
+        <p class="mini meta-info" style="margin:0.125em 0 0.625em; text-align:left;">${metaLine}</p>
         <p class="lead sec-standings" style="font-weight:600;color:var(--ink);">🏆 战绩榜单</p>
         <div class="net-list">${netRows}</div>
         <p class="lead" style="font-weight:600;color:var(--ink);display:flex;align-items:center;gap:0.375em;">${transferIcon} 转账方案</p>
@@ -926,7 +940,15 @@
       renderPlayers(); liveValidate();
     });
     $("genBtn").addEventListener("click", generate);
-    
+
+    // 按钮按压动画：单击即触发（不依赖长按 :active）
+    document.addEventListener("click", (e) => {
+      const btn = e.target.closest(".btn-primary");
+      if (!btn || btn.disabled) return;
+      btn.classList.add("pressing");
+      setTimeout(() => btn.classList.remove("pressing"), 350);
+    });
+
     // ---------- 初始化 ----------
     (function init() {
       const now = new Date();
